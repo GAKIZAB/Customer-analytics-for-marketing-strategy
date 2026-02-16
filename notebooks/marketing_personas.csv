@@ -1,0 +1,4 @@
+nom,description,taille,age,revenu,depense,panier,canal_prefere,produits_preferes,enfants,education,situation
+Les Budgetaires,"Familles avec enfants, sensibles au prix",47.2%,53 ans,35077€,101€,17€,Magasin,"['Vins', 'Viandes', 'Or']",1.3,Graduation,Married
+Les Premium,"Clients aisés, recherche de qualité",23.5%,56 ans,78085€,1398€,71€,Magasin,"['Vins', 'Viandes', 'Poissons']",0.2,Graduation,Married
+Les Premium,"Clients aisés, recherche de qualité",29.3%,58 ans,59245€,790€,45€,Magasin,"['Vins', 'Viandes', 'Or']",1.1,Graduation,Married
