@@ -47,7 +47,7 @@ Ce projet illustre une démarche complète de **Data Analysis appliquée au busi
 
 Les variables ont été **standardisées (z-score)** afin de garantir un poids équivalent dans le modèle de clustering.
 
-## 🔬 Modélisation – Clustering
+## Modélisation – Clustering
 
 ### Choix de l’algorithme : **K-Means**
 
@@ -154,4 +154,4 @@ Pour chaque segment, des **actions marketing ciblées** ont été proposées :
 ## 👤 Auteur
 
 **Bertrand Gakiza**
-📊 Data Analyst / Data Scientist
+Data Analyst / Data Scientist
