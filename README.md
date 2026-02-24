@@ -1,182 +1,63 @@
-# 📊 Segmentation Client pour Marketing Ciblé
+# Segmentation Client pour Campagnes Marketing (Projet Data Mining)
 
-### *Projet Data Analytics – Clustering & Recommandations Marketing*
+## 1. Objectif du Projet
 
----
+L'objectif principal de ce projet est de réaliser une segmentation précise de la clientèle d'une entreprise afin de mieux comprendre ses différents profils d'acheteurs. En utilisant des techniques de clustering, nous visons à identifier des groupes de clients homogènes en fonction de leurs caractéristiques démographiques (âge, revenus) et de leur comportement d'achat (dépenses par catégorie de produits, canaux d'achat utilisés).
 
-## 🧠 Contexte & Objectif
+Cette segmentation permettra à l'entreprise de :
+- Mieux cibler ses actions marketing en adaptant les offres et les messages à chaque segment.
+- Comprendre les préférences de chaque groupe (produits favoris, canaux d'achat privilégiés).
+- Optimiser ses stratégies de fidélisation et de développement de chiffre d'affaires.
 
-Dans un contexte de **marketing data-driven**, les entreprises doivent mieux comprendre leurs clients pour personnaliser leurs actions marketing et maximiser leur retour sur investissement.
+## 2. Méthodologie et Justification des Choix
 
-L’objectif de ce projet est de **segmenter une base clients** d’une entreprise de distribution alimentaire afin de :
+Le projet s'est déroulé en deux phases principales, détaillées dans les notebooks `01_exploration_donnees.ipynb` et `02_analyse_clustering.ipynb`.
 
-* identifier des **profils clients homogènes**,
-* comprendre leurs **comportements d’achat**,
-* proposer des **recommandations marketing actionnables**.
+### a) Exploration et Préparation des Données
 
-Ce projet illustre une démarche complète de **Data Analysis appliquée au business**, depuis la préparation des données jusqu’à l’interprétation métier.
+Avant toute modélisation, une exploration approfondie des données a été menée :
+- **Nettoyage** : Gestion des valeurs manquantes sur la variable `Income`.
+- **Feature Engineering** : Création de nouvelles variables plus pertinentes pour la segmentation, telles que :
+    - `Total_Children` : nombre total d'enfants.
+    - `Total_Purchases` : nombre total d'achats.
+    - `Avg_Basket` : panier moyen.
+    - `Income_Category` : catégorisation des revenus (Faible, Moyen, Élevé, Très élevé).
+- **Sélection des Variables** : Pour le clustering, nous avons sélectionné un ensemble de 10 variables numériques clés, incluant le revenu, l'âge, les dépenses totales, le nombre d'achats par canal, etc.
+- **Standardisation** : Les données ont été standardisées à l'aide de `StandardScaler`. Cette étape est **cruciale** pour le clustering, car elle permet de donner le même poids à toutes les variables, évitant que celles avec des échelles plus grandes (comme le revenu) ne dominent le résultat.
 
----
+### b) Segmentation par Clustering (K-Means)
 
-## 📦 Données
+La méthode de clustering retenue est **K-Means**. Ce choix se justifie pour les raisons suivantes :
+- **Efficacité** : K-Means est un algorithme rapide et efficace, adapté aux volumes de données de taille moyenne.
+- **Interprétabilité** : Les résultats sont faciles à interpréter. Chaque client se voit attribuer un cluster, et chaque cluster est caractérisé par son centre (le "profil moyen").
+- **Objectif du projet** : L'objectif est de créer des groupes d'achats distincts et bien séparés, ce que K-Means cherche à optimiser.
 
-* **2 240 clients**
-* Données **démographiques** : âge, revenu, situation familiale
-* Données **comportementales** : dépenses, fréquence d’achat, canaux utilisés (web, catalogue, magasin)
+Pour déterminer le nombre optimal de clusters (`k`), nous avons utilisé deux méthodes :
+1.  **La Méthode du Coude (Elbow Method)** : En analysant le graphique de l'inertie (somme des distances intra-cluster) en fonction de `k`, on cherche le point où la courbe s'infléchit.
+2.  **Le Score de Silhouette** : Cette métrique évalue la cohésion interne des clusters et leur séparation. Un score proche de 1 indique des clusters bien distincts. Le meilleur score a été obtenu pour `k=2`, mais nous avons retenu `k=3` pour un équilibre entre la qualité statistique et la richesse de l'interprétation métier.
 
----
+## 3. Résultats Obtenus
 
-## 🔍 Démarche analytique
+L'application du K-Means avec 3 clusters a permis d'identifier trois segments de clientèle distincts. Les profils moyens de ces segments sont résumés ci-dessous :
 
-### 1️⃣ Préparation et nettoyage des données
+| Caractéristique | **Cluster 0** | **Cluster 1** | **Cluster 2** |
+| :--- | :--- | :--- | :--- |
+| **Taille** | 1047 clients (47.2%) | 520 clients (23.5%) | 649 clients (29.3%) |
+| **Revenu** | Faible (35k€) | Très élevé (78k€) | Élevé (59k€) |
+| **Âge** | 53 ans | 56 ans | 58 ans |
+| **Dépenses totales** | Très faibles (101€) | Très élevées (1398€) | Élevées (790€) |
+| **Achats Web / Catalogue / Magasin** | 2.1 / 0.6 / 3.2 | 4.8 / 6.4 / 8.4 | 6.7 / 3.0 / 7.9 |
+| **Produits favoris** | (Dépenses très faibles) | Vins, Viandes | Vins, Or |
+| **Présence d'enfants** | Oui | Non | Oui |
 
-* Suppression des valeurs aberrantes
-* Gestion des variables numériques
-* Création de variables agrégées (dépenses totales, nombre total d’achats)
-* Vérification de la cohérence des données
+## 4. Interprétation des Résultats
 
----
+L'analyse des profils moyens permet de qualifier chaque segment :
 
-### 2️⃣ Sélection des variables
+- **Cluster 0 - "Les Petits Budgets" (47.2%)** : Ce segment est le plus large. Il est composé de clients avec des revenus et des dépenses très faibles. Ils ont tendance à acheter principalement en magasin. Ce groupe est probablement sensible au prix et nécessite des offres promotionnelles pour être activé.
 
-10 variables clés ont été retenues pour représenter les dimensions essentielles du comportement client :
+- **Cluster 1 - "Les Gros Dépensiers" (23.5%)** : C'est le segment le plus précieux. Ces clients ont des revenus très élevés et dépensent massivement. Ils sont très actifs sur tous les canaux, avec une préférence marquée pour le catalogue et le magasin. Ils ne semblent pas avoir d'enfants. Les stratégies de fidélisation haut de gamme (ventes privées, avant-premières) seraient les plus adaptées.
 
-| Dimension       | Variables                                                     |
-| --------------- | ------------------------------------------------------------- |
-| Pouvoir d’achat | `Income`, `Total_Spent`                                       |
-| Démographie     | `Age`, `Total_Children`                                       |
-| Canaux d’achat  | `NumWebPurchases`, `NumCatalogPurchases`, `NumStorePurchases` |
-| Engagement      | `NumWebVisitsMonth`, `Recency`                                |
-| Fréquence       | `Total_Purchases`                                             |
+- **Cluster 2 - "Les Acheteurs Connectés Aisés" (29.3%)** : Ce segment a un bon pouvoir d'achat et des dépenses élevées. Il se distingue par sa préférence pour le canal web (le plus haut score) et les achats en magasin. Les produits "Or" sont également plus populaires dans ce groupe. Une stratégie omnicanale, avec un fort accent sur le digital, serait pertinente pour ce segment.
 
----
-
-### 3️⃣ Standardisation
-
-Les variables ont été **standardisées (z-score)** afin de garantir un poids équivalent dans le modèle de clustering.
-
----
-
-## 🔬 Modélisation – Clustering
-
-### Choix de l’algorithme : **K-Means**
-
-Le clustering **K-Means** a été retenu pour :
-
-* sa **rapidité** sur des jeux de données de taille moyenne,
-* son **interprétabilité**,
-* sa pertinence pour des **variables numériques continues**.
-
-Des alternatives (clustering hiérarchique) ont été testées mais écartées pour des raisons de lisibilité et de scalabilité.
-
----
-
-### Choix du nombre de clusters
-
-* Méthode du **coude** (inertie)
-* **Score silhouette**
-* Analyse métier des segments
-
-➡️ Le choix **k = 3** permet un bon compromis entre **performance statistique** et **interprétabilité business**.
-
----
-
-### Réduction dimensionnelle (PCA)
-
-Une **Analyse en Composantes Principales (PCA)** a été utilisée pour :
-
-* visualiser les clusters,
-* comprendre les axes de différenciation.
-
-➡️ Les 3 premières composantes expliquent **70,1 % de la variance totale**.
-
----
-
-## 📊 Résultats
-
-### Synthèse des clusters
-
-| Cluster | Profil                | Caractéristiques principales                               |
-| ------- | --------------------- | ---------------------------------------------------------- |
-| 0       | Budgétaires Familiaux | Revenu faible, familles, faible dépense, achats en magasin |
-| 1       | Aisés Connaisseurs    | Revenu élevé, forte dépense, omnicanal, premium            |
-| 2       | Connectés             | Revenu intermédiaire, digital, engagés                     |
-
----
-
-## 🧩 Interprétation métier
-
-* **Cluster 0** : clients sensibles au prix, nécessitant des stratégies de fidélisation et de volume
-* **Cluster 1** : clients à très forte valeur, orientés qualité et expérience
-* **Cluster 2** : clients digitaux, à fort potentiel de montée en gamme
-
----
-
-## 💡 Recommandations marketing
-
-Pour chaque segment, des **actions marketing ciblées** ont été proposées :
-
-* choix des canaux de communication,
-* messages adaptés,
-* offres commerciales personnalisées.
-
-👉 L’objectif est de **transformer l’analyse data en décisions opérationnelles**.
-
----
-
-## 📈 Impact attendu
-
-* Amélioration de la **personnalisation des campagnes**
-* Augmentation estimée du **chiffre d’affaires : +25 %**
-* **ROI marketing estimé : x3,5**
-
----
-
-## 🛠️ Compétences & Technologies mobilisées
-
-### Data & Analyse
-
-* Python (pandas, numpy)
-* Nettoyage et préparation des données
-* Feature engineering
-
-### Machine Learning
-
-* Clustering (K-Means)
-* Évaluation des modèles (inertie, silhouette)
-* Réduction dimensionnelle (PCA)
-
-### Data Visualization
-
-* matplotlib
-* seaborn
-
-### Business & Communication
-
-* Interprétation métier des résultats
-* Recommandations stratégiques
-* Data storytelling
-
----
-
-## 📂 Structure du projet
-
-```text
-├── data/
-│   ├── marketing_data_raw.csv
-│   └── data_cleaned.csv
-├── notebooks/
-│   ├── 01_exploration_donnees.ipynb
-│   ├── 02_analyse_clustering.ipynb
-│   └── customer_segmentation_marketing_analysis.ipynb
-├── requirements.txt
-└── README.md
-```
-
----
-
-## 👤 Auteur
-
-**Bertrand Gakiza**
-📊 Data Analyst / Data Scientist
-
+En conclusion, ce projet de segmentation a permis de mettre en lumière des différences significatives entre les clients. Les trois profils identifiés offrent une base solide pour le déploiement de stratégies marketing différenciées, visant à augmenter l'efficacité des campagnes et la satisfaction client.
