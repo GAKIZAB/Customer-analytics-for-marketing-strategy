@@ -39,6 +39,7 @@ Pour déterminer le nombre optimal de clusters (`k`), nous avons utilisé deux m
 ## 3. Résultats Obtenus
 
 L'application du K-Means avec 3 clusters a permis d'identifier trois segments de clientèle distincts. Les profils moyens de ces segments sont résumés ci-dessous :
+![Uploading image.png…]()
 
 | Caractéristique | **Cluster 0** | **Cluster 1** | **Cluster 2** |
 | :--- | :--- | :--- | :--- |
